@@ -1,3 +1,9 @@
+#  Copyright (c) 2020. Mariana-Iuliana Georgescu, Radu Tudor Ionescu, Nicolae Verga
+#  Convolutional Neural Networks with  Intermediate Loss for 3D Super-Resolution of CT and MRI Scans
+#  Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)
+#  (https://creativecommons.org/licenses/by-nc-sa/4.0/)
+#
+
 import cv2 as cv
 import numpy as np
 import tensorflow as tf
@@ -10,6 +16,7 @@ import pdb
 config = tf.ConfigProto(
         device_count={'GPU': 1}
     ) 
+
 
 def trim_image(image):
     image[image > 255] = 255
