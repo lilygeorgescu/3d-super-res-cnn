@@ -15,7 +15,8 @@ import pdb
 config = tf.ConfigProto(
         device_count = {'GPU': 1}
     ) 
- 
+
+
 def resize_h_w(downscaled_image, original_image=None):    
     tf.reset_default_graph()         
     # cnn resize  

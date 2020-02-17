@@ -30,26 +30,27 @@ def upscale_h_w(downscaled_image, checkpoint):
             device_count={'GPU': 1}
         ) 
     
-    sess_or = tf.Session(config=config)
-    with sess_or:
+    graph_or = tf.Graph()
+    sess_or = tf.Session(graph=graph_or, config=config)
+    with graph_or.as_default():
         input_or = tf.placeholder(tf.float32, (1, downscaled_image.shape[1], downscaled_image.shape[2], params.num_channels), name='input_or')
         if is_v2:
             _, output_or = nets_hs.SRCNN_late_upscaling_H_W(input_or) 
         else:
-            output_or = nets_hs.SRCNN_late_upscaling_H_W(input_or) 
-        
-    sess_tr = tf.Session(config=config)
-    with sess_tr:
+            output_or = nets_hs.SRCNN_late_upscaling_H_W(input_or)
+        saver = tf.train.Saver()
+        saver.restore(sess_or, checkpoint)
+
+    graph_tr = tf.Graph()
+    sess_tr = tf.Session(graph=graph_tr, config=config)
+    with graph_tr.as_default():
         input_tr = tf.placeholder(tf.float32, (1, downscaled_image.shape[2], downscaled_image.shape[1], params.num_channels), name='input_tr')  
         if is_v2:
-            _, output_tr = nets_hs.SRCNN_late_upscaling_H_W(input_tr, reuse=True)     
+            _, output_tr = nets_hs.SRCNN_late_upscaling_H_W(input_tr, reuse=False)
         else:
-            output_tr = nets_hs.SRCNN_late_upscaling_H_W(input_tr, reuse=True)    
-            
-    saver = tf.train.Saver()
-    print('restoring from ' + checkpoint)
-    saver.restore(sess_or, checkpoint)
-    saver.restore(sess_tr, checkpoint)
+            output_tr = nets_hs.SRCNN_late_upscaling_H_W(input_tr, reuse=False)
+        saver = tf.train.Saver()
+        saver.restore(sess_tr, checkpoint)
     
     num_images = downscaled_image.shape[0]
     cnn_output = []
@@ -117,19 +118,21 @@ def predict_1_2(downscaled_image, checkpoint):
             device_count={'GPU': 1}
         ) 
     
-    sess_or = tf.Session(config=config)
-    with sess_or:
+    graph_or = tf.Graph()
+    sess_or = tf.Session(graph=graph_or, config=config)
+    with graph_or.as_default():
         input_or = tf.placeholder(tf.float32, (1, downscaled_image.shape[1], downscaled_image.shape[2], params.num_channels), name='input_or')  
-        _, output_or = nets_d.SRCNN_late_upscaling_D(input_or) 
-    
-    sess_tr = tf.Session(config=config)
-    with sess_tr:
+        _, output_or = nets_d.SRCNN_late_upscaling_D(input_or)
+        saver = tf.train.Saver()
+        saver.restore(sess_or, checkpoint)
+
+    graph_tr = tf.Graph()
+    sess_tr = tf.Session(graph=graph_tr, config=config)
+    with graph_tr.as_default():
         input_tr = tf.placeholder(tf.float32, (1, downscaled_image.shape[2], downscaled_image.shape[1], params.num_channels), name='input_tr')  
-        _, output_tr = nets_d.SRCNN_late_upscaling_D(input_tr, reuse=True)      
-    saver = tf.train.Saver()
-    print('restoring from __' + checkpoint)
-    saver.restore(sess_or, checkpoint)
-    saver.restore(sess_tr, checkpoint)
+        _, output_tr = nets_d.SRCNN_late_upscaling_D(input_tr, reuse=False)
+        saver = tf.train.Saver()
+        saver.restore(sess_tr, checkpoint)
     
     num_images = downscaled_image.shape[0]
     cnn_output = []
@@ -171,20 +174,21 @@ def predict_2_1(downscaled_image, checkpoint):
             device_count={'GPU': 1}
         ) 
     
-    sess_or = tf.Session(config=config)
-    with sess_or:
+    graph_or = tf.Graph()
+    sess_or = tf.Session(graph=graph_or, config=config)
+    with graph_or.as_default():
         input_or = tf.placeholder(tf.float32, (1, downscaled_image.shape[1], downscaled_image.shape[2], params.num_channels), name='input_or')  
-        _, output_or = nets_d.SRCNN_late_upscaling_D(input_or) 
-        
-    sess_tr = tf.Session(config=config)
-    with sess_tr:
+        _, output_or = nets_d.SRCNN_late_upscaling_D(input_or)
+        saver = tf.train.Saver()
+        saver.restore(sess_or, checkpoint)
+
+    graph_tr = tf.Graph()
+    sess_tr = tf.Session(graph=graph_tr, config=config)
+    with graph_tr.as_default():
         input_tr = tf.placeholder(tf.float32, (1, downscaled_image.shape[2], downscaled_image.shape[1], params.num_channels), name='input_tr')  
-        _, output_tr = nets_d.SRCNN_late_upscaling_D(input_tr, reuse=True)     
-     
-    saver = tf.train.Saver()
-    print('restoring from ' + checkpoint)
-    saver.restore(sess_or, checkpoint)
-    saver.restore(sess_tr, checkpoint)
+        _, output_tr = nets_d.SRCNN_late_upscaling_D(input_tr, reuse=False)
+        saver = tf.train.Saver()
+        saver.restore(sess_tr, checkpoint)
     
     num_images = downscaled_image.shape[0]
     cnn_output = []
