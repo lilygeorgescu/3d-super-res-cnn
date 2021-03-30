@@ -95,13 +95,7 @@ eval_path = './data/train'
 scale = 2
 
 test_images_gt, test_images = read_images(test_path)  
-# checkpoint = tf.train.latest_checkpoint(params.folder_data)  
-# checkpoint = os.path.join(params.folder_data, 'model.ckpt%d' % 15)
-# compute_performance_indeces(test_path, test_images_gt, test_images, checkpoint, write_to_summary=False) 
-# exit()
+checkpoint = tf.train.latest_checkpoint(params.folder_data)
+compute_performance_indices(test_path, test_images_gt, test_images, checkpoint, write_to_summary=False)
 
-for i in range(30, 40):
-    checkpoint = os.path.join(params.folder_data, 'model.ckpt%d' % i)
-    compute_performance_indices(test_path, test_images_gt, test_images, checkpoint)
-    # compute_performance_indeces(eval_path, eval_images_gt, eval_images, checkpoint)  
  
